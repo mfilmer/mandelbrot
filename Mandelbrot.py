@@ -18,12 +18,11 @@ class mandelbrot(object):
                 val = self.getPointCount(complex(a,b))
                 loc = self.__locToPix((l,t,w,h),res,(a,b))
                 if mode == 'Binary':
-                    if val == 25:
-                        setAccess[loc] = (255,)*3
-                    else:
+                    if val == 26:
                         loc = tuple(map(int,loc))
-                        #print loc
                         setAccess[loc] = (0,)*3
+                    else:
+                        setAccess[loc] = (255,)*3
                 elif mode == 'Gray' or mode == 'Color':
                     setAccess[loc] = ((26-val)*10,)*3
                     if mode == 'Color':
@@ -38,7 +37,7 @@ class mandelbrot(object):
         else:
             return False
     
-    def getPointCount(self,c,iterations=25,radius=2):
+    def getPointCount(self,c,iterations=26,radius=2):
         z = 0
         for i in xrange(iterations):
             z = z**2 + c
