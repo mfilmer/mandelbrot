@@ -1,11 +1,15 @@
 from __future__ import division
 import Image
+import datetime
+#http://code.google.com/p/mpmath/
+
+FILENAME = 'mandelbrot' + str(datetime.datetime.now()) + '.png'
 
 class mandelbrot(object):
     def __init__(self):
         pass
     
-    def genImage(self,(l,t,w,h),res,fileName,mode='Binary'):
+    def genImage(self,(l,t,w,h),res,fileName=FILENAME,mode='Binary'):
         if not mode in ['Binary','Gray','Color']:
             error('invalid mode')
         setImage = Image.new('RGB',(w*res,h*res))
@@ -51,6 +55,16 @@ class mandelbrot(object):
         return ((x-l)*res,-(y-t)*res)
     
     def __frange(self,start,stop=None,step=1):
+        if step == 0:
+            error('step cannot be 0')
+        if stop is None:
+            stop = start
+            start = 0
+        count = int((stop - start)/step)
+        for i in xrange(count):
+            yield i*step + start
+    
+    def __frangeOld(self,start,stop=None,step=1):
         if step == 0:
             error('step cannot be 0')
         if stop is None:
