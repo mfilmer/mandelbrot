@@ -28,7 +28,7 @@ class mandelbrot(object):
         return i
     
     def __frange(self, start, stop=None, step=1):
-        if stop == None:
+        if stop is None:
             stop = start
             start = 0
         i = start
