@@ -4,18 +4,18 @@ import datetime
 #http://code.google.com/p/mpmath/
 
 FILENAME = 'mandelbrot' + str(datetime.datetime.now()) + '.png'
+FILENAME = FILENAME.replace(' ','_')
+FILENAME = FILENAME.replace(':','.')
 
 class mandelbrot(object):
     def __init__(self):
         pass
     
-    def genImage(self,(l,t,w,h),res,fileName=FILENAME,mode='Binary'):
+    def genImage(self,(l,t,w,h),res,fileName=FILENAME,mode='Gray'):
         if not mode in ['Binary','Gray','Color']:
             error('invalid mode')
-        setImage = Image.new('RGB',(w*res,h*res))
+        setImage = Image.new('RGB',(int(w*res),int(h*res)))
         setAccess = setImage.load()
-        #example usage:
-        #setAccess[0,0] = (0,0,0)
         #complex numbers represented as a + bj
         for a in self.__frange(l,l+w,1/res):        #real part
             for b in self.__frange(t,t-h,-1/res):    #imag part
@@ -28,7 +28,7 @@ class mandelbrot(object):
                     else:
                         setAccess[loc] = (255,)*3
                 elif mode == 'Gray' or mode == 'Color':
-                    setAccess[loc] = ((26-val)*10,)*3
+                    setAccess[loc] = ((256-val),)*3
                     if mode == 'Color':
                         #colorize the gray image
                         pass
@@ -41,7 +41,7 @@ class mandelbrot(object):
         else:
             return False
     
-    def getPointCount(self,c,iterations=26,radius=2):
+    def getPointCount(self,c,iterations=256,radius=2):
         z = 0
         for i in xrange(iterations):
             z = z**2 + c
@@ -61,22 +61,7 @@ class mandelbrot(object):
             stop = start
             start = 0
         count = int((stop - start)/step)
+        a = start
         for i in xrange(count):
-            yield i*step + start
-    
-    def __frangeOld(self,start,stop=None,step=1):
-        if step == 0:
-            error('step cannot be 0')
-        if stop is None:
-            stop = start
-            start = 0
-        i = start
-        while True:
-            yield i
-            i += step
-            if step > 0:
-                if i >= stop:
-                    break
-            else:
-                if i <= stop:
-                    break
+            yield a
+            a += step
